@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [com.stuartsierra/component "0.2.3"]
+                 [prismatic/schema "0.4.3"]
                  [http-kit "2.1.18"]
                  [aleph "0.4.0"]
                  [com.novemberain/monger "3.0.0-rc1"]])

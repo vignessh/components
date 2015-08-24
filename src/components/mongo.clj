@@ -1,13 +1,14 @@
 (ns components.mongo
   (:require [com.stuartsierra.component :as component]
-            [monger.core :as mg])
+            [monger.core :as mg]
+            [schema.core :as s])
   (:import [com.mongodb DB MongoClient MongoOptions ServerAddress]))
 
-(defrecord MongoServer [host port database options connection]
+(defrecord Mongo [host port database options connection]
   component/Lifecycle
 
   (start [this]
-    (println ";; Starting MongoServer")
+    (println ";; Starting Mongo")
     (if connection
       this
       (let [^ServerAddress address (mg/server-address host port)
@@ -16,21 +17,21 @@
         (assoc this :connection db)))) 
   
   (stop [this]
-    (println ";; Stopping MongoServer")
+    (println ";; Stopping Mongo")
     (if-not connection
       this
       (do (.close connection)
           (dissoc this :connection)))))
 
-(defn new-mongo-server 
+(s/defn new-mongo-server :- Mongo 
   [{:keys [host 
-           mongo-port 
+           port 
            database 
            options]
     :or {host "localhost"
          mongo-port 27017
          options {:connections-per-host 30}}}]
   (map->MongoServer {:host host 
-                     :port mongo-port
+                     :port port
                      :database database
                      :options options}))
